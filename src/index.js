@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
@@ -9,15 +10,17 @@ import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
 import AdminLayout from "layouts/Admin.js";
-
+import Login from "views/login";
 const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <Router history={hist}>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Redirect to="/admin/dashboard" />
-    </Switch>
-  </Router>,
+  <Login />
+  // <Router history={hist}>
+  //   <Switch>
+  //     <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+  //     <Redirect to="/admin/" />
+  //   </Switch>
+  // </Router>
+  ,
   document.getElementById("root")
 );

@@ -7,7 +7,7 @@
     "bootstrap": "4.5.0",
     "chart.js": "2.9.3",
     "history": "4.10.1",
-    "node-sass": "4.14.1",
+    "node-sass": "^4.14.1",
     "perfect-scrollbar": "1.5.0",
     "react": "16.13.1",
     "react-chartjs-2": "2.9.0",
@@ -17,6 +17,7 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
+    "react-tilt": "^0.1.4",
     "reactstrap": "8.4.1"
   },
   "scripts": {
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "gulp": "4.0.2",
-    "gulp-append-prepend": "1.0.8"
+    "gulp-append-prepend": "1.0.8",
+    "gulp-sass": "^3.1.0"
   }
 }
