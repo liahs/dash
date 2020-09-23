@@ -34,6 +34,7 @@ import {
   InputGroupText,
   InputGroupAddon,
   Input,
+  Button
 } from "reactstrap";
 
 import routes from "routes.js";
@@ -194,6 +195,9 @@ class Header extends React.Component {
                     <span className="d-lg-none d-md-block">Account</span>
                   </p>
                 </Link>
+              </NavItem>
+              <NavItem>
+                <Button className='mt-1 ml-sm-2' outline color="success" size="sm">Logout</Button>
               </NavItem>
             </Nav>
           </Collapse>

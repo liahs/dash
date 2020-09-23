@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/paper-dashboard.scss?v=1.2.0";
 import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+import logo from 'assets/img/loader.svg' ;
 
 import AdminLayout from "layouts/Admin.js";
 import Login from "views/login";
@@ -26,11 +27,17 @@ export default function App() {
     async function fetchData() {
       const { data } = await transport.get('http://localhost:5000/admin/checksignin')
       if(data.status){
+        let timeout=setTimeout(()=>{
         changeloading(false)
-        authentication(true)
+          authentication(true)
+         clearTimeout(timeout)
+        },3000)
       }
       else{
-        changeloading(false)
+        let timeout=setTimeout(()=>{
+          changeloading(false)
+           clearTimeout(timeout)
+          },2000)
       }
     }
     fetchData()
@@ -41,7 +48,7 @@ export default function App() {
       return (
     <div>
       {loading ? (
-        <h1 className="text-center  pt-5">Loading</h1>
+        <img src={logo} style={{position:'absolute',left:"50%",top:'50%'}}/>
       ) : (
         <Router history={hist}>
           <Switch>
@@ -51,7 +58,7 @@ export default function App() {
             <Route path="/admin" render={props => <AdminLayout {...props} />} />
           </Switch>
           {isauthenticated ? (
-            <Redirect to="/admin" />
+            <Redirect to="/admin/dashboard" />
           ) : (
             <Redirect to="/login" />
           )}

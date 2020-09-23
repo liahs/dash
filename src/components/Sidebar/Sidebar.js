@@ -58,18 +58,16 @@ class Sidebar extends React.Component {
       >
         <div className="logo">
           <a
-            href="https://www.creative-tim.com"
             className="simple-text logo-mini"
           >
-            <div className="logo-img">
-              <img src={logo} alt="react-logo" />
-            </div>
+            {/* <div className="logo-img">
+              <img src='src/assets/img/LogoCar.png'  alt="react-logo" />
+            </div> */}
           </a>
           <a
-            href="https://www.creative-tim.com"
             className="simple-text logo-normal"
           >
-            Creative Tim
+            Carhoot
           </a>
         </div>
         <div className="sidebar-wrapper" ref={this.sidebar}>

@@ -10,6 +10,22 @@ import venStyle5 from "../assets/vendor/select2/select2.min.css";
 import icon from "../assets/img/icons/favicon.ico";
 import Tilt from "react-tilt";
 import axios from 'axios'
+import NotificationAlert from "react-notification-alert";
+
+var options =(message)=>({
+  place: 'tc',
+  message: (
+      <div>
+          <div>
+             {message}
+          </div>
+      </div>
+  ),
+  type: "danger",
+  icon: "now-ui-icons ui-1_bell-53",
+  autoDismiss: 2
+})
+
 const transport = axios.create({
   withCredentials: true,
 })
@@ -18,6 +34,7 @@ function Login (props){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loader,setLoader]=useState(false)
+  const notify=React.useRef(null)
   const handleTextfield = (e) => {
     switch (e.target.name) {
       case "email":
@@ -37,20 +54,19 @@ function Login (props){
     })
     if(data.status){
       props.handleAuthentication(true)
-      alert(data.exp)
     }
     else{
       setLoader(false)
-      alert(data.exp)
+      notify.current.notificationAlert(options(data.exp));
     }
   }
 
-  
         return (
             <div className="limiter">
+               <NotificationAlert ref={notify} />
                 <div className="container-login100">
-                    <div className="wrap-login100">
-                        <Tilt className="Tilt picHide" options={{ max: 25 }} style={{ height: 250, width: 250 }} >
+                    <div className="wrap-login100 ">
+                        <Tilt className="Tilt picHide shadow-lg rounded-lg" options={{ max: 25 }} style={{ height: 250}} >
                             <div className="login100-pic">
                                 <img src={require("../assets/img/assetPic.png")} alt="IMG" />
                             </div>
@@ -103,8 +119,6 @@ function Login (props){
                   Login
                 </button>
               </div>
-
-                          
                         </form>
                     </div>
                 </div>
