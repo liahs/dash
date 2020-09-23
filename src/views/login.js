@@ -45,24 +45,20 @@ function Login (props){
     }
   }
 
-  return (
-      <div className="limiter">
-        <div className="container-login100">
-          <div className="wrap-login100">
-            <Tilt
-              className="Tilt"
-              options={{ max: 25 }}
-              style={{ height: 250, width: 250 }}
-            >
-              <div className="login100-pic js-tilt">
-                <img src={require("../assets/img/img-01.png")} alt="IMG" />
-              </div>
-            </Tilt>
-            <form
-              className="login100-form validate-form"
-              onSubmit={handleSubmit}
-            >
-              <span className="login100-form-title">Admin Login</span>
+  
+        return (
+            <div className="limiter">
+                <div className="container-login100">
+                    <div className="wrap-login100">
+                        <Tilt className="Tilt picHide" options={{ max: 25 }} style={{ height: 250, width: 250 }} >
+                            <div className="login100-pic">
+                                <img src={require("../assets/img/assetPic.png")} alt="IMG" />
+                            </div>
+                        </Tilt>
+                        <form className="login100-form validate-form" onSubmit={handleSubmit}>
+                            <span className="login100-form-title">
+                                Admin Login
+                            </span>
 
               <div
                 className="wrap-input100 validate-input"
@@ -108,13 +104,13 @@ function Login (props){
                 </button>
               </div>
 
-              <div className="text-center p-t-12"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    );
-
+                          
+                        </form>
+                    </div>
+                </div>
+            </div>
+        );
+    
 }
 
 export default Login;

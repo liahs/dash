@@ -386,6 +386,9 @@ iframe {
   .login100-pic {
     display: none;
   }
+  .picHide {
+    display: none;
+  }
 
   .login100-form {
     width: 100%;
@@ -465,3 +468,14 @@ iframe {
     opacity: 1;
   }
 }
+
+/* @media(min-width:400px){
+  .picHide{
+      display: none;
+  }
+}
+@media(max-width:400px){
+  .picHide{
+    display: inline;
+  }
+} */
