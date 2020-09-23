@@ -39,8 +39,8 @@ class Login extends React.Component {
                 <div className="container-login100">
                     <div className="wrap-login100">
                         <Tilt className="Tilt" options={{ max: 25 }} style={{ height: 250, width: 250 }} >
-                            <div className="login100-pic js-tilt">
-                                <img src={require("../assets/img/img-01.png")} alt="IMG" />
+                            <div className="login100-pic">
+                                <img src={require("../assets/img/assetPic.png")} alt="IMG" />
                             </div>
                         </Tilt>
                         <form className="login100-form validate-form">
@@ -68,10 +68,6 @@ class Login extends React.Component {
                                 <button className="login100-form-btn">
                                     Login
                                 </button>
-                            </div>
-
-                            <div className="text-center p-t-12">
-                       
                             </div>
 
                           
