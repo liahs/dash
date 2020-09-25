@@ -5,11 +5,10 @@ import { Card, CardHeader, CardBody, CardTitle,CardSubtitle, Row, Col } from "re
 import { Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap'
 import axios from 'axios'
 import Api from '../defaultApi'
-const transport =axios.create({
-  withCredentials:true
-})
+
 
 export default function RescueTab(props){
+
   const [head,setHead]=useState('')
   const [subhead,setSubhead]=useState('')
   const [modal, setModal] = useState(false)
@@ -18,10 +17,13 @@ export default function RescueTab(props){
   const [steps,setSteps]=useState([])
   const [type,setType]=useState('Jump start')
   const [typeId,setTypeid]=useState(null)
-
-  
+  const token=localStorage.getItem('token')
   async function _getData(){
-        let {data} =await transport(Api+'/admin/getrescueservices')
+        let {data} =await axios.get(Api+'/admin/getrescueservices',{
+          headers:{
+            'authorization':token
+          }
+        })
         if(data.status){
           setloader(false)
           setData(data.services)
@@ -36,7 +38,11 @@ export default function RescueTab(props){
 
 const loadTypes = async (id,type) => 
 {
-  let {data}=await transport(Api+'/admin/getrescuesteps/'+id)
+  let {data}=await axios.get(Api+'/admin/getrescuesteps/'+id,{
+    headers:{
+      'authorization':token
+    }
+  })
   if(data.status){
     console.log(data)
     setSteps(data.steps)
@@ -55,10 +61,14 @@ const TableSteps=(type)=>{
       )
 }
 const addSteps=async ()=>{
-  let {data}=await transport.post(Api+'/admin/addrescueSteps',{
+  let {data}=await axios.post(Api+'/admin/addrescueSteps',{
     type:typeId,
     stephead:head,
     stepsubhead:subhead
+  },{
+    headers:{
+      'authorization':token
+    }
   })
   if(data.status){
     setSteps(data.steps.steps)
@@ -79,7 +89,7 @@ const handleChangeText=(e)=>{
 
 return(
   <>
-{isloaded?<div className="content">Loading.....</div>: 
+{isloaded?<div className="content">Loading.......</div>: 
 <div className="content">
 <Modal isOpen={modal} toggle={toggle}>
 <ModalHeader toggle={toggle}>{type} Steps</ModalHeader>

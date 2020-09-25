@@ -115,13 +115,8 @@ class Header extends React.Component {
     }
   }
 logout=async()=>{   
-    let transport=axios.create({
-      withCredentials:true
-    })
-    let {data}=await transport(Api+'/admin/signout')
-    if(data.status){
+     localStorage.setItem('token',null)
       this.props.history.replace({pathname:'/login'})
-    }
   }
   render() {
     return (
