@@ -12,6 +12,22 @@ import venStyle5 from "../assets/vendor/select2/select2.min.css";
 import icon from "../assets/img/icons/favicon.ico";
 import Tilt from "react-tilt";
 import axios from 'axios'
+import NotificationAlert from "react-notification-alert";
+
+var options = (message) => ({
+  place: 'tc',
+  message: (
+    <div>
+      <div>
+        {message}
+      </div>
+    </div>
+  ),
+  type: "danger",
+  icon: "now-ui-icons ui-1_bell-53",
+  autoDismiss: 2
+})
+
 const transport = axios.create({
   withCredentials: true,
 })
@@ -22,7 +38,7 @@ function Login(props) {
   const [loader, setLoader] = useState(false)
   const [invalidEmail, setInvalidEmail] = useState(false)
   const [invalidPwd, setInvalidPwd] = useState(false)
-
+  const notify = React.useRef(null)
   const handleTextfield = (e) => {
     console.log(e.target.name)
     switch (e.target.name) {
@@ -48,14 +64,12 @@ function Login(props) {
     })
     if (data.status) {
       props.handleAuthentication(true)
-      alert(data.exp)
     }
     else {
       setLoader(false)
-      alert(data.exp)
+      notify.current.notificationAlert(options(data.exp));
     }
   }
-
 
   return (
     <div className="limiter">

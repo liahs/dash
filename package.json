@@ -2,7 +2,6 @@
   "name": "paper-dashboard-react",
   "version": "1.2.0",
   "private": true,
-  "homepage": "https://demos.creative-tim.com/paper-dashboard-react/#/dashboard",
   "dependencies": {
     "axios": "^0.20.0",
     "bootstrap": "4.5.0",
@@ -19,6 +18,7 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
     "react-tilt": "^0.1.4",
+    "react-year-picker": "^0.3.7",
     "reactstrap": "8.4.1"
   },
   "scripts": {

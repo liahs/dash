@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /*!
 
 =========================================================
@@ -61,9 +62,9 @@ class Sidebar extends React.Component {
             href="https://www.google.com"
             className="simple-text logo-mini"
           >
-            <div className="logo-img">
-              <img src={logo} alt="react-logo" />
-            </div>
+            {/* <div className="logo-img">
+              <img src='src/assets/img/LogoCar.png'  alt="react-logo" />
+            </div> */}
           </a>
           <a
             href="https://www.google.com"

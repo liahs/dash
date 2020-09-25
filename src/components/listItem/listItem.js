@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 /* eslint react/no-multi-comp: 0, react/prop-types: 0 */
 
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-
 const ModalExample = (props) => {
   const {
     buttonLabel,
@@ -10,33 +10,66 @@ const ModalExample = (props) => {
   } = props;
 
   const [modal, setModal] = useState(false);
+  const [modalDelete, setDeleteModal] = useState(false)
 
   const toggle = () => setModal(!modal);
+  const toggleDelete = () => setDeleteModal(!modalDelete)
 
   const closeBtn = <button className="close" onClick={toggle}>&times;</button>;
+  const closeBtn2 = <button className="close" onClick={toggleDelete}>&times;</button>;
+
+  function handleSubmit() {
+
+  }
 
   return (
-  <div>
-    <div className="row container item">
-    <p>{props.carName}</p>
-    <Button color="danger" onClick={toggle}>{buttonLabel}</Button> <Button color="danger" onClick={toggle}>{buttonLabel}</Button>
-    </div>
-    <Modal isOpen={modal} toggle={toggle} className={className}>
-      <ModalHeader toggle={toggle} close={closeBtn}>Modal title</ModalHeader>
-      <ModalBody>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+    <div>
+      <div className="container item">
+        <table className="table table-striped">
+          <tbody>
+            {props.cars.map(function (x) {
+              return <tr key={x.id}>
+                <th scope="row">{x.id}</th>
+                <td>{x.carName}</td>
+                <td><Button className="btn btn-success" onClick={toggle}>Edit</Button></td>
+                <td><Button className="btn btn-secondary" onClick={toggleDelete}>Delete</Button></td>
+              </tr>
+            }
+            )}
+          </tbody>
+        </table>
+      </div>
+      <Modal isOpen={modal} toggle={toggle} className="modal-dialog-centered">
+        <ModalHeader toggle={toggle} close={closeBtn}>Edit Car</ModalHeader>
+        <ModalBody>
+          <div className="col-sm text-center">
+            <form onSubmit={handleSubmit()}>
+              <div className="form-group">
+                <div className="carInp">
+                  <input type="text" placeholder="Car Make" className="form-control" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>Save</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={modalDelete} toggle={toggleDelete} className="modal-dialog-centered">
+        <ModalHeader toggle={toggleDelete} close={closeBtn2}>Delete Car</ModalHeader>
+        <ModalBody>
+          Are You Sure ?
       </ModalBody>
-      <ModalFooter>
-        <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
-        <Button color="secondary" onClick={toggle}>Cancel</Button>
-      </ModalFooter>
-    </Modal>
-  </div>
-);
+        <ModalFooter>
+          <Button color="primary" onClick={toggleDelete}>Delete</Button>{' '}
+          <Button color="secondary" onClick={toggleDelete}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
 }
 
 export default ModalExample;
