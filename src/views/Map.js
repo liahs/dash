@@ -6,13 +6,13 @@ import axios from 'axios'
 import Api from '../defaultApi'
 import {socket} from '../socketCon'
 
-
 export default function Requests() {
   const [rrequests, setRrequests] = useState([])
   const [steps, setSteps] = useState([])
   const [modal, setModal] = useState(false)
   const [dwork, setDwork] = useState(0)
   const [rid,setRid]=useState('')
+  const [isloaded,setLoader]=useState(false)
   const [users,setUsers]=useState([])
   let [rarr,setRarr]=useState([])
   const [stepsdone,setStepdone]=useState(0)
@@ -26,7 +26,7 @@ export default function Requests() {
     })
     if (data.status) {
       setRrequests(data.data.reverse())
-      console.log(data)
+      setLoader(true)
     }
     const x=await axios.get(Api+'/admin/users',{
       headers:{
@@ -120,7 +120,7 @@ const _getData=async ()=>{
           <button className="btn btn-outline-success btn-sm" onClick={toggle}>Done</button>
         </ModalFooter>
       </Modal>
-      {rrequests.length > 0 ?
+      {isloaded ?
         <React.Fragment>
           <Row>
             <Col md="3"><button className="btn btn-success">Rescue</button></Col>
@@ -156,7 +156,7 @@ const _getData=async ()=>{
               </table>
             </div>
           </Row>
-        </React.Fragment> : <p>loading....</p>
+        </React.Fragment> : <p>Loading.....</p>
       }
     </div>
   )
