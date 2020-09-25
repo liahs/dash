@@ -11,7 +11,7 @@ import icon from "../assets/img/icons/favicon.ico";
 import Tilt from "react-tilt";
 import axios from 'axios'
 import NotificationAlert from "react-notification-alert";
-
+import Api from '../defaultApi'
 var options =(message)=>({
   place: 'tc',
   message: (
@@ -48,7 +48,7 @@ function Login (props){
   const handleSubmit=async (e) => {
     setLoader(true)
     e.preventDefault()
-    const { data } = await transport.post('http://localhost:5000/admin/signin',{
+    const { data } = await transport.post(Api+'/admin/signin',{
       email,
       password
     })
@@ -71,7 +71,7 @@ function Login (props){
                                 <img src={require("../assets/img/assetPic.png")} alt="IMG" />
                             </div>
                         </Tilt>
-                        <form className="login100-form validate-form" onSubmit={handleSubmit}>
+                        <form className="login100-form validate-form" method="post" onSubmit={handleSubmit}>
                             <span className="login100-form-title">
                                 Admin Login
                             </span>

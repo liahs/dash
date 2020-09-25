@@ -2,6 +2,7 @@
   "name": "paper-dashboard-react",
   "version": "1.2.0",
   "private": true,
+  "homepage": "https://liahs.github.io/carhoot",
   "dependencies": {
     "axios": "^0.20.0",
     "bootstrap": "4.5.0",
@@ -18,7 +19,8 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
     "react-tilt": "^0.1.4",
-    "reactstrap": "8.4.1"
+    "reactstrap": "8.4.1",
+    "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

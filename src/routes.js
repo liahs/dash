@@ -5,7 +5,6 @@ import Typography from "views/Typography.js";
 import TableList from "views/Tables.js";
 import Maps from "views/Map.js";
 import UserPage from "views/User.js";
-import UpgradeToPro from "views/Upgrade.js";
 
 var routes = [
   {
@@ -16,15 +15,15 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
+    path: "/Rescue",
+    name: "Rescue Services",
     icon: "nc-icon nc-diamond",
     component: Icons,
     layout: "/admin",
   },
   {
-    path: "/maps",
-    name: "Maps",
+    path: "/Requests",
+    name: "Requests",
     icon: "nc-icon nc-pin-3",
     component: Maps,
     layout: "/admin",
