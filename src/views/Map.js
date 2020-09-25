@@ -16,27 +16,13 @@ export default function Requests() {
   const [users,setUsers]=useState([])
   let [rarr,setRarr]=useState([])
   const [stepsdone,setStepdone]=useState(0)
+  useEffect(()=>{
+    fetchData()
+  },[stepsdone])
+  const [loaderModal,setLm]=useState(false)
   const token=localStorage.getItem('token')
-  
-  const fetchData = async () => {
-    const { data } = await axios.get(Api + '/admin/getRescueRequest',{
-      headers:{
-        'authorization':token
-      }
-    })
-    if (data.status) {
-      setRrequests(data.data.reverse())
-      setLoader(true)
-    }
-    const x=await axios.get(Api+'/admin/users',{
-      headers:{
-        'authorization':token
-      }
-    })
-    if(x.data.status){
-      setUsers(x.data.users)
-    }
-  }
+
+ 
 
 const _getData=async ()=>{
     let { data } = await axios.get(Api + '/admin/getrescueservices',{
@@ -49,9 +35,9 @@ const _getData=async ()=>{
     }
   }
   const callChanges = async () => {
-    setDwork(dwork + 1)
+    setStepdone(stepsdone+1)
     let { data } = await axios.post(Api + '/admin/changesinsteps', {
-      steps: dwork,
+      steps: stepsdone+1,
       rid:rid
     },{
       headers:{
@@ -60,11 +46,11 @@ const _getData=async ()=>{
     })
     if(data.status){
       console.log("working!!!!")
-      setStepdone(stepsdone+1)
     }
   }
 
   const loadSteps = async (id,Rid,nstep) => {
+    setModal(!modal)
     let { data } = await axios.get(Api + '/admin/getrescuesteps/' + id,{
       headers:{
         'authorization':token
@@ -79,9 +65,35 @@ const _getData=async ()=>{
     }
     setRid(Rid)
     setStepdone(nstep)
-    setModal(!modal)
   }
-  const toggle = () => setModal(!modal)
+
+  const toggle = () => {
+    setModal(!modal)
+    fetchData()
+  }
+
+  const fetchData = async () => {
+    const { data } = await axios.get(Api + '/admin/getRescueRequest',{
+      headers:{
+        'authorization':token
+      }
+    })
+    if (data.status) {
+      const x=await axios.get(Api+'/admin/users',{
+        headers:{
+          'authorization':token
+        }
+      })
+      if(x.data.status){
+        setUsers(x.data.users)
+        setRrequests(data.data.reverse())
+        console.log(data.data)
+        setLoader(true)
+      }
+    
+    }
+  }
+  
   useEffect(() => {
     _getData()
     socket.on('rescueRequest',(data)=>{
@@ -90,7 +102,7 @@ const _getData=async ()=>{
     })
     fetchData()
     return () => { }
-  }, [false])
+  },[false])
   return (
     <div className="content">
       <Modal isOpen={modal} toggle={toggle}>

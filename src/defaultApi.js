@@ -1,3 +1,3 @@
-const api='https://carhoot.herokuapp.com'
+const api='http://carhoot.herokuapp.com'
 
 export default api
