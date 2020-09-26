@@ -14,8 +14,8 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/maps",
-    name: "Maps",
+    path: "/Requests",
+    name: "Requests",
     icon: "nc-icon nc-pin-3",
     component: Maps,
     layout: "/admin",

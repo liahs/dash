@@ -13,15 +13,15 @@ import icon from "../assets/img/icons/favicon.ico";
 import Tilt from "react-tilt";
 import axios from 'axios'
 import NotificationAlert from "react-notification-alert";
-
-var options = (message) => ({
+import Api from '../defaultApi'
+var options =(message)=>({
   place: 'tc',
   message: (
-    <div>
       <div>
-        {message}
+          <div>
+             {message}
+          </div>
       </div>
-    </div>
   ),
   type: "danger",
   icon: "now-ui-icons ui-1_bell-53",
@@ -58,7 +58,7 @@ function Login(props) {
   const handleSubmit = async (e) => {
     setLoader(true)
     e.preventDefault()
-    const { data } = await transport.post('http://localhost:5000/admin/signin', {
+    const { data } = await transport.post(Api+'/admin/signin',{
       email,
       password
     })
@@ -73,6 +73,7 @@ function Login(props) {
 
   return (
     <div className="limiter">
+    <NotificationAlert ref={notify}/>
       <div className="container-login100">
         <div className="wrap-login100">
           <Tilt className="Tilt picHide" options={{ max: 25 }} style={{ height: 250, width: 250 }} >

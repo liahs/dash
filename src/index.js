@@ -9,11 +9,30 @@ import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/paper-dashboard.scss?v=1.2.0";
 import "assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
-import logo from 'assets/img/loader.svg' ;
-
+import logo from 'assets/img/loader.svg';
+import { socket } from './socketCon'
 import AdminLayout from "layouts/Admin.js";
 import Login from "views/login";
 import axios from 'axios'
+import Api from './defaultApi'
+import { UserContext } from './contextUserState'
+import NotificationAlert from "react-notification-alert";
+
+var options = (user, type) => ({
+  place: 'br',
+  message: (
+    <div>
+      <div>
+        <h3>{type}</h3>
+            User:{user}
+      </div>
+    </div>
+  ),
+  type: "danger",
+  icon: "now-ui-icons ui-1_bell-53",
+  autoDismiss: 7
+})
+
 
 const hist = createBrowserHistory();
 
@@ -24,47 +43,53 @@ const transport = axios.create({
 export default function App() {
   const [isauthenticated, authentication] = useState(false);
   const [loading, changeloading] = useState(true);
+  const notify = React.useRef(null)
   useEffect(() => {
+
     async function fetchData() {
-      const { data } = await transport.get('http://localhost:5000/admin/checksignin')
-      if(data.status){
-        let timeout=setTimeout(()=>{
+      const { data } = await transport.get(Api + '/admin/checksignin')
+      if (data.status) {
         changeloading(false)
-          authentication(true)
-         clearTimeout(timeout)
-        },10)
+        authentication(true)
       }
-      else{
-        let timeout=setTimeout(()=>{
-          changeloading(false)
-           clearTimeout(timeout)
-          },10)
+      else {
+        changeloading(false)
       }
     }
+    socket.on('rescueRequest', (data) => {
+      if (isauthenticated) {
+        notify.current.notificationAlert(options(data.name, data.type));
+      }
+    })
     fetchData()
-    },[isauthenticated])
- const handleAuthentication=(x)=>{
-  authentication(x)
+    return () => { console.log('fred') }
+  }, [isauthenticated])
+
+  const handleAuthentication = (x) => {
+    authentication(x)
   }
-      return (
+  return (
     <div>
+      <NotificationAlert ref={notify} />
       {loading ? (
-        <img src={logo} style={{position:'absolute',left:"50%",top:'50%'}}/>
+        <img src={logo} style={{ position: 'absolute', left: "50%", top: '50%' }} />
       ) : (
-        <Router history={hist}>
-          <Switch>
-            <Route exact path="/login">
-              <Login handleAuthentication={handleAuthentication} />
-            </Route>
-            <Route path="/admin" render={props => <AdminLayout {...props} />} />
-          </Switch>
-          {isauthenticated ? (
-            <Redirect to="/admin/dashboard" />
-          ) : (
-            <Redirect to="/login" />
-          )}
-        </Router>
-      )}
+          <UserContext.Provider value={{ handleAuthentication }}>
+            <Router history={hist}>
+              <Switch>
+                <Route exact path="/login">
+                  <Login handleAuthentication={handleAuthentication} />
+                </Route>
+                <Route path="/admin" render={props => <AdminLayout {...props} />} />
+              </Switch>
+              {isauthenticated ? (
+                <Redirect to="/admin/dashboard" />
+              ) : (
+                  <Redirect to="/login" />
+                )}
+            </Router>
+          </UserContext.Provider>
+        )}
     </div>
   );
 }

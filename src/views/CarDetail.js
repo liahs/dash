@@ -3,8 +3,9 @@
 
 import React from "react";
 import ListItem from "../components/listItem/listItem";
-import styles from "../assets/css/dashboard.css"
-import YearPicker from "react-year-picker";
+import styles from "../assets/css/dashboard.css";
+import Api from "../../src/defaultApi"
+// import YearPicker from "react-year-picker";
 // reactstrap components
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 // core components
@@ -40,10 +41,27 @@ class CarDetail extends React.Component {
     this.toggleAddModelModal = this.toggleAddModelModal.bind(this)
     this.toggleAddEngineModal = this.toggleAddEngineModal.bind(this)
     this.handleYearChange = this.handleYearChange.bind(this)
+    this.getCars = this.getCars.bind(this)
   }
 
   componentDidMount() {
     this.getModels()
+    this.getCars()
+  }
+
+  getCars(){
+    fetch(Api + "/getAllCars", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "http://localhost:3000"
+      },
+      // body: JSON.stringify({ }),
+    }).then(function(response) {
+      return console.log(response)
+    }, function(error) {
+      return error
+    })
   }
 
   getModels() {

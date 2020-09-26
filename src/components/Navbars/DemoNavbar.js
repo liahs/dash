@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /*!
 
 =========================================================
@@ -36,10 +37,14 @@ import {
   Input,
   Button
 } from "reactstrap";
-
+import axios from 'axios'
 import routes from "routes.js";
+import Api from '../../defaultApi.js'
+import {socket} from '../../socketCon'
+import {UserContext} from '../../contextUserState'
 
 class Header extends React.Component {
+  static contextType = UserContext;
   constructor(props) {
     super(props);
     this.state = {
@@ -97,6 +102,7 @@ class Header extends React.Component {
     }
   }
   componentDidMount() {
+    console.log(this.props)
     window.addEventListener("resize", this.updateColor.bind(this));
   }
   componentDidUpdate(e) {
@@ -107,6 +113,15 @@ class Header extends React.Component {
     ) {
       document.documentElement.classList.toggle("nav-open");
       this.sidebarToggle.current.classList.toggle("toggled");
+    }
+  }
+logout=async()=>{   
+    let transport=axios.create({
+      withCredentials:true
+    })
+    let {data}=await transport(Api+'/admin/signout')
+    if(data.status){
+      this.props.history.replace({pathname:'/login'})
     }
   }
   render() {
@@ -197,7 +212,7 @@ class Header extends React.Component {
                 </Link>
               </NavItem>
               <NavItem>
-                <Button className='mt-1 ml-sm-2' outline color="success" size="sm">Logout</Button>
+                <Button className='mt-1 ml-sm-2' outline color="success" size="sm" onClick={this.logout}>Logout</Button>
               </NavItem>
             </Nav>
           </Collapse>
