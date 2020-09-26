@@ -28,9 +28,6 @@ var options =(message)=>({
   autoDismiss: 2
 })
 
-const transport = axios.create({
-  withCredentials: true,
-})
 
 function Login(props) {
   const [email, setEmail] = useState('')
@@ -58,11 +55,13 @@ function Login(props) {
   const handleSubmit = async (e) => {
     setLoader(true)
     e.preventDefault()
-    const { data } = await transport.post(Api+'/admin/signin',{
+    
+    const { data } = await axios.post(Api+'/admin/signin',{
       email,
       password
     })
-    if (data.status) {
+    if(data.status){
+      localStorage.setItem('token',data.token)
       props.handleAuthentication(true)
     }
     else {

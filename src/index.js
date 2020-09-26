@@ -36,19 +36,19 @@ var options = (user, type) => ({
 
 const hist = createBrowserHistory();
 
-const transport = axios.create({
-  withCredentials: true,
-})
-
 export default function App() {
   const [isauthenticated, authentication] = useState(false);
   const [loading, changeloading] = useState(true);
   const notify = React.useRef(null)
   useEffect(() => {
-
     async function fetchData() {
-      const { data } = await transport.get(Api + '/admin/checksignin')
-      if (data.status) {
+      const token=localStorage.getItem('token')
+      const { data } = await axios.post(Api+'/admin/checksignin',{},{
+        headers:{
+          'authorization':token
+        }
+      })
+      if(data.status){
         changeloading(false)
         authentication(true)
       }

@@ -9,50 +9,56 @@ import axios from 'axios'
 import Api from '../defaultApi'
 import {socket} from '../socketCon'
 
-const transport = axios.create({
-  withCredentials: true
-})
 export default function Requests() {
   const [rrequests, setRrequests] = useState([])
   const [steps, setSteps] = useState([])
   const [modal, setModal] = useState(false)
   const [dwork, setDwork] = useState(0)
   const [rid,setRid]=useState('')
+  const [isloaded,setLoader]=useState(false)
   const [users,setUsers]=useState([])
   let [rarr,setRarr]=useState([])
   const [stepsdone,setStepdone]=useState(0)
-  const fetchData = async () => {
-    const { data } = await transport(Api + '/admin/getRescueRequest')
-    if (data.status) {
-      setRrequests(data.data.reverse())
-      console.log(data)
-    }
-    const x=await transport(Api+'/admin/users')
-    if(x.data.status){
-      setUsers(x.data.users)
-    }
-  }
+  useEffect(()=>{
+    fetchData()
+  },[stepsdone])
+  const [loaderModal,setLm]=useState(false)
+  const token=localStorage.getItem('token')
+
+ 
 
 const _getData=async ()=>{
-    let { data } = await transport(Api + '/admin/getrescueservices')
+    let { data } = await axios.get(Api + '/admin/getrescueservices',{
+      headers:{
+        'authorization':token
+      }
+    })
     if (data.status) {
       setRarr(data.services)
     }
   }
   const callChanges = async () => {
-    setDwork(dwork + 1)
-    let { data } = await transport.post(Api + '/admin/changesinsteps', {
-      steps: dwork,
+    setStepdone(stepsdone+1)
+    let { data } = await axios.post(Api + '/admin/changesinsteps', {
+      steps: stepsdone+1,
       rid:rid
+    },{
+      headers:{
+        'authorization':token
+      }
     })
     if(data.status){
       console.log("working!!!!")
-      setStepdone(stepsdone+1)
     }
   }
 
   const loadSteps = async (id,Rid,nstep) => {
-    let { data } = await transport(Api + '/admin/getrescuesteps/' + id)
+    setModal(!modal)
+    let { data } = await axios.get(Api + '/admin/getrescuesteps/' + id,{
+      headers:{
+        'authorization':token
+      }
+    })
     if (data.status) {
       setSteps(data.steps)
     }
@@ -62,9 +68,35 @@ const _getData=async ()=>{
     }
     setRid(Rid)
     setStepdone(nstep)
-    setModal(!modal)
   }
-  const toggle = () => setModal(!modal)
+
+  const toggle = () => {
+    setModal(!modal)
+    fetchData()
+  }
+
+  const fetchData = async () => {
+    const { data } = await axios.get(Api + '/admin/getRescueRequest',{
+      headers:{
+        'authorization':token
+      }
+    })
+    if (data.status) {
+      const x=await axios.get(Api+'/admin/users',{
+        headers:{
+          'authorization':token
+        }
+      })
+      if(x.data.status){
+        setUsers(x.data.users)
+        setRrequests(data.data.reverse())
+        console.log(data.data)
+        setLoader(true)
+      }
+    
+    }
+  }
+  
   useEffect(() => {
     _getData()
     socket.on('rescueRequest',(data)=>{
@@ -73,7 +105,7 @@ const _getData=async ()=>{
     })
     fetchData()
     return () => { }
-  }, [false])
+  },[false])
   return (
     <div className="content">
       <Modal isOpen={modal} toggle={toggle}>
@@ -89,7 +121,7 @@ const _getData=async ()=>{
                 <div className="py-3 px-2">
                   <input type="checkbox" checked={checked} onChange={(e) => {
                     callChanges()
-                  }} disabled={stepsdone+1<i}></input>
+                  }} disabled={stepsdone+1<i||i<stepsdone+1}></input>
                 </div>
                 <div className="bg-light rounded mt-1 m-2 pl-2 py-2" style={{ width: "70%" }}>
                   <h5 >{x.head}</h5>
@@ -103,7 +135,7 @@ const _getData=async ()=>{
           <button className="btn btn-outline-success btn-sm" onClick={toggle}>Done</button>
         </ModalFooter>
       </Modal>
-      {rrequests.length > 0 ?
+      {isloaded ?
         <React.Fragment>
           <Row>
             <Col md="3"><button className="btn btn-success">Rescue</button></Col>
@@ -139,187 +171,8 @@ const _getData=async ()=>{
               </table>
             </div>
           </Row>
-        </React.Fragment> : <p>loading....</p>
+        </React.Fragment> : <p>Loading.....</p>
       }
     </div>
   )
 }
-
-// const MapWrapper = withScriptjs(
-//   withGoogleMap((props) => (
-//     <GoogleMap
-//       defaultZoom={13}
-//       defaultCenter={{ lat: 40.748817, lng: -73.985428 }}
-//       defaultOptions={{
-//         scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
-//         styles: [
-//           {
-//             featureType: "water",
-//             stylers: [
-//               {
-//                 saturation: 43,
-//               },
-//               {
-//                 lightness: -11,
-//               },
-//               {
-//                 hue: "#0088ff",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "road",
-//             elementType: "geometry.fill",
-//             stylers: [
-//               {
-//                 hue: "#ff0000",
-//               },
-//               {
-//                 saturation: -100,
-//               },
-//               {
-//                 lightness: 99,
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "road",
-//             elementType: "geometry.stroke",
-//             stylers: [
-//               {
-//                 color: "#808080",
-//               },
-//               {
-//                 lightness: 54,
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "landscape.man_made",
-//             elementType: "geometry.fill",
-//             stylers: [
-//               {
-//                 color: "#ece2d9",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "poi.park",
-//             elementType: "geometry.fill",
-//             stylers: [
-//               {
-//                 color: "#ccdca1",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "road",
-//             elementType: "labels.text.fill",
-//             stylers: [
-//               {
-//                 color: "#767676",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "road",
-//             elementType: "labels.text.stroke",
-//             stylers: [
-//               {
-//                 color: "#ffffff",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "poi",
-//             stylers: [
-//               {
-//                 visibility: "off",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "landscape.natural",
-//             elementType: "geometry.fill",
-//             stylers: [
-//               {
-//                 visibility: "on",
-//               },
-//               {
-//                 color: "#b8cb93",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "poi.park",
-//             stylers: [
-//               {
-//                 visibility: "on",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "poi.sports_complex",
-//             stylers: [
-//               {
-//                 visibility: "on",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "poi.medical",
-//             stylers: [
-//               {
-//                 visibility: "on",
-//               },
-//             ],
-//           },
-//           {
-//             featureType: "poi.business",
-//             stylers: [
-//               {
-//                 visibility: "simplified",
-//               },
-//             ],
-//           },
-//         ],
-//       }}
-//     >
-//       <Marker position={{ lat: 40.748817, lng: -73.985428 }} />
-//     </GoogleMap>
-//   ))
-// );
-
-// class Map extends React.Component {
-//   render() {
-//     return (
-//       <>
-//         <div className="content">
-//           <Row>
-//             <Col md="12">
-//               <Card>
-//                 <CardHeader>Google Maps</CardHeader>
-//                 <CardBody>
-//                   <div
-//                     id="map"
-//                     className="map"
-//                     style={{ position: "relative", overflow: "hidden" }}
-//                   >
-//                     <MapWrapper
-//                       googleMapURL="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"
-//                       loadingElement={<div style={{ height: `100%` }} />}
-//                       containerElement={<div style={{ height: `100%` }} />}
-//                       mapElement={<div style={{ height: `100%` }} />}
-//                     />
-//                   </div>
-//                 </CardBody>
-//               </Card>
-//             </Col>
-//           </Row>
-//         </div>
-//       </>
-//     );
-//   }
-// }
-
-// export default Map;
