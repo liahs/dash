@@ -13,7 +13,7 @@ import logo from 'assets/img/loader.svg';
 import { socket } from './socketCon'
 import AdminLayout from "layouts/Admin.js";
 import Login from "views/login";
-import axios from 'axios'
+import axios from 'axios';
 import Api from './defaultApi'
 import { UserContext } from './contextUserState'
 import NotificationAlert from "react-notification-alert";

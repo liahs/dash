@@ -4,26 +4,13 @@
 import React from "react";
 import ListItem from "../components/listItem/listItem";
 import styles from "../assets/css/dashboard.css";
-import Api from "../../src/defaultApi"
+import Api from "../../src/defaultApi";
+import axios from 'axios';
 // import YearPicker from "react-year-picker";
 // reactstrap components
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 // core components
-let carData = [
-  {
-    id:1,
-    carName:"Lamborghini"
-  },
-  {
-    id:2,
-    carName:"Bugatti"
-  },
-  {
-    id:3,
-    carName:"Ferrari"
-  }
-]
-
+let carData = []
 class CarDetail extends React.Component {
   constructor() {
     super();
@@ -44,24 +31,31 @@ class CarDetail extends React.Component {
     this.getCars = this.getCars.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.getModels()
-    this.getCars()
+    await this.getCars()
   }
 
-  getCars(){
-    fetch(Api + "/getAllCars", {
-      method: "GET",
+  async getCars() {
+    console.log("Inside Get Cars")
+    const token = localStorage.getItem('token')
+    console.log("Token => ", token)
+    const { data } = await axios.get(Api + '/admin/getallcars', {}, {
       headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "http://localhost:3000"
-      },
-      // body: JSON.stringify({ }),
-    }).then(function(response) {
-      return console.log(response)
-    }, function(error) {
-      return error
+        'authorization': token
+      }
     })
+    if (data.status) {
+      console.log("Exp==>>", data.exp)
+      carData = data.exp
+      this.setState({ X: ""})
+      // changeloading(false)
+      // authentication(true)
+    }
+    else {
+      console.log(data)
+      // changeloading(false)
+    }
   }
 
   getModels() {

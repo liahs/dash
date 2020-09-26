@@ -28,9 +28,9 @@ const ModalExample = (props) => {
         <table className="table table-striped">
           <tbody>
             {props.cars.map(function (x) {
-              return <tr key={x.id}>
-                <th scope="row">{x.id}</th>
-                <td>{x.carName}</td>
+              return <tr key={x._id}>
+                <th scope="row">{x._id}</th>
+                <td style={{ textTransform:'capitalize' , fontWeight:'bold' }}>{x.carmake}</td>
                 <td><Button className="btn btn-success" onClick={toggle}>Edit</Button></td>
                 <td><Button className="btn btn-secondary" onClick={toggleDelete}>Delete</Button></td>
               </tr>
